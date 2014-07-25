@@ -85,9 +85,10 @@ var graficoSpeedDay = {
 <body>
 	<div class="container">
 		<div id="speedControl">
-			<!-- <h:commandButton value="Generate Data" action="#{speedMBean.generator()}" styleClass="btn btn-primary"></h:commandButton> -->
 			<div class="graficos" id="speedPerDay"></div>
 			<div class="graficos" id="dynamicSpeed"></div>
+			<br></br>
+			<h:commandButton value="Generate Data" action="#{speedMBean.speedGenerator()}" styleClass="btn btn-primary"></h:commandButton>
 		</div>
 	</div>
 </body>
