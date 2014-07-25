@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<head>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"></link>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	
+	<!--  had to remove highchart reference as highstock already includes highcharts. with both files = undefined is not a function for highstock -->
+	<script src="http://code.highcharts.com/stock/highstock.js"></script>
+	<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+
+<script type="text/javascript">
+$(function () {
+var graficoSpeedDay = {
+        chart: {
+            renderTo: 'speedPerDay',
+            events: {
+				load: function() {
+					$.ajax({          
+			            url: '/SpeedControlJSF/rest/graphics/speedPerDay',  
+			            contentType: "application/json; charset=utf-8",  
+			            dataType: 'json',  
+			            success: function(data) {  
+			                    //manipulando o JSON
+		                    console.log(data); 
+		                    var time = [];
+		                    var speed = [];
+		                  //<![CDATA[ 
+		                    for (var i=0; i < data.length ; i++) {
+								time[i] = data[i].time;
+								speed[i] = data[i].speed;
+				            }
+				         
+		                    grafico.series[0].setData(speed, true);
+		                    grafico.xAxis[0].setCategories(time);
+		                  //]]>
+			            } 
+			        });  
+				}
+           	}
+        },
+        title: {
+            text: 'Speeds day 1'
+        },
+        xAxis: {
+            categories: []
+        },
+        yAxis: {
+            min: 10,
+            title: {
+                text: 'Speed'
+            }
+        },
+        series: [{
+            name: 'Speed',
+            data: []
+
+        }]
+    }
+
+	var grafico = new Highcharts.Chart(graficoSpeedDay);
+    if (typeof addChart == 'function') { 
+        addChart('speedPerDay', grafico ); 
+    }
+
+
+    
+});
+</script>
+
+<style>
+.graficos {
+	margin-top:10rem;	
+}
+
+</style>
+
+</head>
+
+<body>
+	<div class="container">
+		<div id="speedControl">
+			<!-- <h:commandButton value="Generate Data" action="#{speedMBean.generator()}" styleClass="btn btn-primary"></h:commandButton> -->
+			<div class="graficos" id="speedPerDay"></div>
+			<div class="graficos" id="dynamicSpeed"></div>
+		</div>
+	</div>
+</body>
+
+</html>
