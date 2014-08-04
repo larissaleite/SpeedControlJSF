@@ -54,14 +54,22 @@ public class RadarService implements IRadarService {
 			tags.add("not fined");
 		}
 		
-		System.out.println("Speed "+speed);
+		//System.out.println("Speed "+speed);
 		//radarService.registerSpeed(getCurrentTime(), speed, tags);
 		SpeedRadar sr = new SpeedRadar();
 		sr.setSpeed(speed);
-		System.out.println(new Date(getCurrentTime().getTime()).toString());
+		//System.out.println(new Date(getCurrentTime().getTime()).toString());
 		sr.setTime(getCurrentTime());
 		
 		return sr;
+	}
+
+	public List<SpeedRadar> getFinedSpeeds() {
+		return speedDao.retrieveFinedSpeeds();
+	}
+
+	public List<SpeedRadar> getNotFinedSpeeds() {
+		return speedDao.retrieveNotFinedSpeeds();
 	}
 
 }

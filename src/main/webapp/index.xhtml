@@ -27,8 +27,7 @@ var graficoSpeedDay = {
 			            contentType: "application/json; charset=utf-8",  
 			            dataType: 'json',  
 			            success: function(data) {  
-			                    //manipulando o JSON
-		                    console.log(data); 
+		                  //  console.log(data); 
 		                    var time = [];
 		                    var speed = [];
 		                  //<![CDATA[ 
@@ -83,22 +82,16 @@ var graficoSpeedDay = {
 	    				            contentType: "application/json; charset=utf-8",  
 	    				            dataType: 'json',  
 	    				            success: function(data) {  
-	    				                    //manipulando o JSON
-	    			                    console.log(data); 
+	    			                    //console.log(data); 
 	    			                    var time;
 	    			                    var speed;
-	    			                  //<![CDATA[ 
 	    			                  
 	    								time = data.time;
 	    								speed = data.speed;
-	    								console.log("time "+time);
-	    								console.log("speed "+speed);
+	    								//console.log("time "+time);
+	    								//console.log("speed "+speed);
 
-	    					            //if (grafico2.series[0])
 	    			                    grafico2.series[0].addPoint([time, speed], true, true, true);
-	    			                    //grafico.series[0].setData(speed, true);
-	    			                    //grafico.xAxis[0].setCategories(time);
-	    			                  //]]>
 	    				            } 
 	    				        });
 	                        }, 1000);  
@@ -132,30 +125,6 @@ var graficoSpeedDay = {
     var graficoTags = {
             chart: {
                 renderTo: 'tags',
-                events: {
-    				load: function() {
-    					$.ajax({          
-    			            url: '/SpeedControlJSF/rest/graphics/tag',  
-    			            contentType: "application/json; charset=utf-8",  
-    			            dataType: 'json',  
-    			            success: function(data) {  
-        			           
-    		                    console.log(data); 
-    		                    var time = [];
-    		                    var speed = [];
-    		                  //<![CDATA[ 
-    		                    for (var i=0; i < data.length ; i++) {
-    								time[i] = data[i].time;
-    								speed[i] = data[i].speed;
-    				            }
-    				         
-    		                    grafico3.series[0].setData(speed, true);
-    		                    grafico3.xAxis[0].setCategories(time);
-    		                  //]]>
-    			            } 
-    			        });  
-    				}
-               	}
             },
             title: {
                 text: 'Speeds day 1'
@@ -180,7 +149,31 @@ var graficoSpeedDay = {
         if (typeof addChart == 'function') { 
             addChart('tags', grafico3 ); 
         }
-        
+
+        $('input:radio').on('change', function(){
+            //access value of changed radio group with $(this).val()
+            console.log("radio clicked "+$(this).val());
+            $.ajax({          
+	            url: '/SpeedControlJSF/rest/graphics/speedTag/'+$(this).val(),  
+	            contentType: "application/json; charset=utf-8",  
+	            dataType: 'json',  
+	            success: function(data) {  
+	                console.log(data);
+	                var speed = [];
+	                var time = [];
+	                  //<![CDATA[ 
+                     for (var i=0; i < data.length ; i++) {
+								time[i] = data[i].time;
+								speed[i] = data[i].speed;
+				            }
+	                  //]]>
+                    
+                    grafico3.xAxis[0].setCategories(time);
+                    grafico3.series[0].setData(speed, true);
+                    
+	            } 
+	        });  
+        });
     
 });
 </script>
@@ -200,6 +193,15 @@ var graficoSpeedDay = {
 			<div class="graficos" id="speedPerDay"></div>
 			<div class="graficos" id="speedDynamic"></div>
 			<div class="graficos" id="tags"></div>
+			<div class="btn-group" data-toggle="buttons">
+			    <label class="btn btn-primary">
+			        <input type="radio" name="options" id="option1" value="fined" />Fined
+			    </label>
+			    <label class="btn btn-primary">
+			        <input type="radio" name="options" id="option2" value="not fined" />Not fined
+			    </label>
+			</div>
+			<br></br>
 			<br></br>
 			<!-- <h:commandButton value="Generate Data" action="#{speedMBean.speedGenerator()}" styleClass="btn btn-primary"></h:commandButton> -->
 		</div>

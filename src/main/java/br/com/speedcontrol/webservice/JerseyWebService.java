@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -32,4 +33,15 @@ public class JerseyWebService {
 		return service.getSpeedRealTime();
 	}
 
+	@GET
+	@Path("/speedTag/{param}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SpeedRadar> getSpeedsTags(@PathParam("param") String param) {
+		System.out.println("parametro "+param);
+		IRadarService service = new RadarService();
+		if (param.equals("fined"))
+			return service.getFinedSpeeds();
+		else
+			return service.getNotFinedSpeeds();
+	}
 }
