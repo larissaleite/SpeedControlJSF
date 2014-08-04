@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.faces.bean.ManagedBean;
 
+import br.com.speedcontrol.model.SpeedRadar;
 import br.com.speedcontrol.service.IRadarService;
 import br.com.speedcontrol.service.RadarService;
 
@@ -35,15 +36,15 @@ public class SpeedMBean {
 		 return new Timestamp(date.getTime());
 	}
 	
-	public void speedGenerator() {
+	public SpeedRadar speedGenerator() {
 		
-		for (;;) {
+		//for (;;) {
 			
-			try {
+			/*try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
+			}*/
 			
 			float speed = speed();
 			List<String> tags = new ArrayList<String>();
@@ -54,8 +55,14 @@ public class SpeedMBean {
 				tags.add("not fined");
 			}
 			
-			radarService.registerSpeed(getCurrentTime(), speed, tags);
+			System.out.println("Speed "+speed);
+			//radarService.registerSpeed(getCurrentTime(), speed, tags);
+			SpeedRadar sr = new SpeedRadar();
+			sr.setSpeed(speed);
+			sr.setTime(getCurrentTime());
+			
+			return sr;
 		}
-	}
+	//}
 
 }

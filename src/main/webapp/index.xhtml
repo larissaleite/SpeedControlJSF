@@ -16,6 +16,7 @@
 
 <script type="text/javascript">
 $(function () {
+	
 var graficoSpeedDay = {
         chart: {
             renderTo: 'speedPerDay',
@@ -68,7 +69,118 @@ var graficoSpeedDay = {
         addChart('speedPerDay', grafico ); 
     }
 
+	var graficoDinamico = {
+	        chart: {
+		        type: 'spline',
+		        animation: Highcharts.svg,
+	            renderTo: 'speedDynamic',
+	            events: {
+					load: function() {
+						 var series = this.series[0];
+	                        setInterval(function() {
+	                        	$.ajax({          
+	    				            url: '/SpeedControlJSF/rest/graphics/speed',  
+	    				            contentType: "application/json; charset=utf-8",  
+	    				            dataType: 'json',  
+	    				            success: function(data) {  
+	    				                    //manipulando o JSON
+	    			                    console.log(data); 
+	    			                    var time;
+	    			                    var speed;
+	    			                  //<![CDATA[ 
+	    			                  
+	    								time = data.time;
+	    								speed = data.speed;
+	    								console.log("time "+time);
+	    								console.log("speed "+speed);
 
+	    					            //if (grafico2.series[0])
+	    			                    grafico2.series[0].addPoint([time, speed], true, true, true);
+	    			                    //grafico.series[0].setData(speed, true);
+	    			                    //grafico.xAxis[0].setCategories(time);
+	    			                  //]]>
+	    				            } 
+	    				        });
+	                        }, 1000);  
+					}
+	           	}
+	        },
+	        title: {
+	            text: 'Speeds Dynamic'
+	        },
+	        xAxis: {
+	            type:'datetime',
+	            tickPixelInterval: 150
+	        },
+	        yAxis: {
+	            min: 10,
+	            title: {
+	                text: 'Speed'
+	            }
+	        },
+	        series: [{
+	            name: 'Speed',
+	            data: [0, 0, 0, 0, 0]
+	        }]
+	}
+
+	var grafico2 = new Highcharts.Chart(graficoDinamico);
+    if (typeof addChart == 'function') { 
+        addChart('speedDynamic', grafico2 ); 
+    }
+
+    var graficoTags = {
+            chart: {
+                renderTo: 'tags',
+                events: {
+    				load: function() {
+    					$.ajax({          
+    			            url: '/SpeedControlJSF/rest/graphics/tag',  
+    			            contentType: "application/json; charset=utf-8",  
+    			            dataType: 'json',  
+    			            success: function(data) {  
+        			           
+    		                    console.log(data); 
+    		                    var time = [];
+    		                    var speed = [];
+    		                  //<![CDATA[ 
+    		                    for (var i=0; i < data.length ; i++) {
+    								time[i] = data[i].time;
+    								speed[i] = data[i].speed;
+    				            }
+    				         
+    		                    grafico3.series[0].setData(speed, true);
+    		                    grafico3.xAxis[0].setCategories(time);
+    		                  //]]>
+    			            } 
+    			        });  
+    				}
+               	}
+            },
+            title: {
+                text: 'Speeds day 1'
+            },
+            xAxis: {
+                categories: []
+            },
+            yAxis: {
+                min: 10,
+                title: {
+                    text: 'Speed'
+                }
+            },
+            series: [{
+                name: 'Speed',
+                data: []
+
+            }]
+        }
+
+    	var grafico3 = new Highcharts.Chart(graficoTags);
+        if (typeof addChart == 'function') { 
+            addChart('tags', grafico3 ); 
+        }
+        
     
 });
 </script>
@@ -86,9 +198,10 @@ var graficoSpeedDay = {
 	<div class="container">
 		<div id="speedControl">
 			<div class="graficos" id="speedPerDay"></div>
-			<div class="graficos" id="dynamicSpeed"></div>
+			<div class="graficos" id="speedDynamic"></div>
+			<div class="graficos" id="tags"></div>
 			<br></br>
-			<h:commandButton value="Generate Data" action="#{speedMBean.speedGenerator()}" styleClass="btn btn-primary"></h:commandButton>
+			<!-- <h:commandButton value="Generate Data" action="#{speedMBean.speedGenerator()}" styleClass="btn btn-primary"></h:commandButton> -->
 		</div>
 	</div>
 </body>
