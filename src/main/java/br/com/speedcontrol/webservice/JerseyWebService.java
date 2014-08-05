@@ -8,8 +8,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import br.com.speedcontrol.dao.ISpeedDao;
-import br.com.speedcontrol.dao.SpeedDao;
 import br.com.speedcontrol.model.SpeedRadar;
 import br.com.speedcontrol.service.IRadarService;
 import br.com.speedcontrol.service.RadarService;

@@ -2,8 +2,6 @@ package br.com.speedcontrol.service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -54,12 +52,12 @@ public class RadarService implements IRadarService {
 			tags.add("not fined");
 		}
 		
-		//System.out.println("Speed "+speed);
-		//radarService.registerSpeed(getCurrentTime(), speed, tags);
+		Timestamp currentTime = getCurrentTime();
 		SpeedRadar sr = new SpeedRadar();
 		sr.setSpeed(speed);
-		//System.out.println(new Date(getCurrentTime().getTime()).toString());
-		sr.setTime(getCurrentTime());
+		sr.setTime(currentTime);
+		
+		speedDao.registerSpeed(currentTime, speed, tags);
 		
 		return sr;
 	}

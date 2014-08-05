@@ -8,16 +8,14 @@ import java.util.Random;
 import javax.faces.bean.ManagedBean;
 
 import br.com.speedcontrol.model.SpeedRadar;
-import br.com.speedcontrol.service.IRadarService;
-import br.com.speedcontrol.service.RadarService;
 
 @ManagedBean
 public class SpeedMBean {
 	
-	private IRadarService radarService;
+	//private IRadarService radarService;
 		
 	public SpeedMBean(){
-		radarService = new RadarService();
+		//radarService = new RadarService();
 	}
 	
 	private float speed() {
